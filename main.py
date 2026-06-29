@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, status, HTTPException
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -44,37 +44,62 @@ def home_page():
 
 # CRUD - 
 
-users = []
+# users = []
 
-class User(BaseModel):
-    name: str
-    age: int
+# class User(BaseModel):
+#     name: str
+#     age: int
     
-@app.post("/users")
-def create_user(user: User):
-    users.append(user)
-    return {"message": "User created", "user": user}
+# @app.post("/users")
+# def create_user(user: User):
+#     users.append(user)
+#     return {"message": "User created", "user": user}
 
-@app.get("/users")
-def get_all_users():
-    return users
+# @app.get("/users")
+# def get_all_users():
+#     return users
 
-@app.get("/users/{user_id}")
-def get_single_user(user_id: int):
-    if user_id < len(users):
-        return users[user_id]
-    return {"message": "User not found"}
+# @app.get("/users/{user_id}")
+# def get_single_user(user_id: int):
+#     if user_id < len(users):
+#         return users[user_id]
+#     return {"message": "User not found"}
 
-@app.put("/users/{user_id}")
-def update_user(user_id: int, updated_user: User):
-    if user_id < len(users):
-        users[user_id] = updated_user
-        return {"message": "User updated", "user": updated_user}
-    return {"message": "User not found"}
+# @app.put("/users/{user_id}")
+# def update_user(user_id: int, updated_user: User):
+#     if user_id < len(users):
+#         users[user_id] = updated_user
+#         return {"message": "User updated", "user": updated_user}
+#     return {"message": "User not found"}
 
-@app.delete("/users/{user_id}")
-def delete_user(user_id: int):
-    if user_id < len(users):
-        deleted_user = users.pop(user_id)
-        return {"message": "User deleted", "user": deleted_user}
-    return {"message": "User not found"}
+# @app.delete("/users/{user_id}")
+# def delete_user(user_id: int):
+#     if user_id < len(users):
+#         deleted_user = users.pop(user_id)
+#         return {"message": "User deleted", "user": deleted_user}
+#     return {"message": "User not found"}
+
+
+
+# Response model - 
+
+
+# users = []
+
+# class User(BaseModel):
+#     name: str
+#     age: int
+#     password:str
+
+# class UserResponse(BaseModel):
+#     name: str
+#     age: int
+
+# @app.get('/create-user', response_model=UserResponse)
+# def create_user(user: User):
+#     users.append(user)
+#     return {'message': 'User created', 'user': user}
+
+
+
+# Error Handling
