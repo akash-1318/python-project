@@ -103,3 +103,37 @@ def home_page():
 
 
 # Error Handling
+
+# @app.post("/user", status_code=status.HTTP_201_CREATED)
+# def create_user():
+#     return {
+#         "message": "user created"
+#     }
+
+# @app.get("/user")
+# def get_user():
+#     return {
+#         "status":"Success",
+#         "message":"User Fetched",
+#         "data":{
+#             "name":"Akash",
+#             "age":22
+#         }
+#     }
+
+# @app.get("/user/{user_id}")
+# def get_user(user_id:int):
+#     if user_id != 1:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail={"message": "User not found"}
+#         )
+#     return {
+#         "status":"Success",
+#         "message":"User Fetched",
+#         "data":{
+#             "name":"Akash",
+#             "age":22
+#         }
+#     }
+    
