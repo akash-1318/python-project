@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status, HTTPException, Request
+from fastapi import FastAPI, status, HTTPException, Request, Depends, Header
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
@@ -142,27 +142,71 @@ def home_page():
 # Advanced exception - 
 
 # If UserNotFoundException occurs run this handler
-class UserNotFoundException(Exception):
-    def __init__(self, name):
-        self.name = name
+# class UserNotFoundException(Exception):
+#     def __init__(self, name):
+#         self.name = name
         
-@app.exception_handler(UserNotFoundException)
-def user_not_found_handler(request: Request, exc: UserNotFoundException):
-    return JSONResponse(
-        status_code=status.HTTP_404_NOT_FOUND,
-        content={"message": f"User {exc.name} not found"}
-    )
+# @app.exception_handler(UserNotFoundException)
+# def user_not_found_handler(request: Request, exc: UserNotFoundException):
+#     return JSONResponse(
+#         status_code=status.HTTP_404_NOT_FOUND,
+#         content={"message": f"User {exc.name} not found"}
+#     )
 
 
-@app.get("/user/{user_id}")
-def get_user(user_id: int):
-    if user_id != 1:
-        raise UserNotFoundException(user_id)
-    return {
-        "message": "User found",
-        "data": {
-            "id": user_id,
-            "name": "Akash",
-            "age": 22
-        }
-    }
+# @app.get("/user/{user_id}")
+# def get_user(user_id: int):
+#     if user_id != 1:
+#         raise UserNotFoundException(user_id)
+#     return {
+#         "message": "User found",
+#         "data": {
+#             "id": user_id,
+#             "name": "Akash",
+#             "age": 22
+#         }
+#     }
+
+
+# Depency Injection
+
+# def get_current_user():
+#     return {
+#         "user": "Akash"
+#     }
+
+
+# @app.get('/home')
+# def home_page(user = Depends(get_current_user)):
+#     return {
+#         "message": "Welcome to fastapi",
+#         "user": user
+#     }
+
+# @app.get("/dashboard")
+# def dashboard(user = Depends(get_current_user)):
+#     return {
+#         "message": "Welcome to dashboard",
+#         "user": user
+#     } 
+
+# Depency Injection
+
+# def varify_token(token: str = Header(None)):
+#     if token != "akashtoken":
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED,
+#             detail={"message": "Invalid token"}
+#         )
+#     return {
+#         "message": "Welcome to fastapi",
+#         "token": token
+#     }
+
+# @app.get('/home')
+# def home_page(token = Depends(varify_token)):
+#     return {
+#         "message": "Welcome to fastapi",
+#         "token": token
+#     }
+    
