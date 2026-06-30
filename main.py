@@ -1,6 +1,7 @@
 from fastapi import FastAPI, status, HTTPException, Request, Depends, Header
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+import sqlite3
 
 app = FastAPI()
 
@@ -210,3 +211,14 @@ def home_page():
 #         "token": token
 #     }
     
+
+# Middleware - 
+# It will run for every http request - for performance tracking,api monitoring you can use middleware.
+
+@app.middleware('http')
+async def my_middleware(request: Request, call_next):
+    print("Middleware started")
+    response = await call_next(request)
+    print("Middleware ended")
+    response.headers["X-Custom-Header"] = "My Custom Value"
+    return response
