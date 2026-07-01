@@ -1,13 +1,17 @@
+import sqlite3
 from fastapi import FastAPI, status, HTTPException, Request, Depends, Header
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 import sqlite3
+from sqlalchemy import create_engine,Column,Integer,String
+from sqlalchemy.orm import sessionmaker, declarative_base,Session
+from fastapi import FastAPI,Depends
 
 app = FastAPI()
 
-@app.get('/')
-def home_page():
-    return {'message': 'Welcome to fastapi'}
+# @app.get('/')
+# def home_page():
+#     return {'message': 'Welcome to fastapi'}
 
 # Path parameters
 # @app.get("/users/{user_id}")
@@ -215,10 +219,59 @@ def home_page():
 # Middleware - 
 # It will run for every http request - for performance tracking,api monitoring you can use middleware.
 
-@app.middleware('http')
-async def my_middleware(request: Request, call_next):
-    print("Middleware started")
-    response = await call_next(request)
-    print("Middleware ended")
-    response.headers["X-Custom-Header"] = "My Custom Value"
-    return response
+# @app.middleware('http')
+# async def my_middleware(request: Request, call_next):
+#     print("Middleware started")
+#     response = await call_next(request)
+#     print("Middleware ended")
+#     response.headers["X-Custom-Header"] = "My Custom Value"
+#     return response
+
+
+# Database connection by sqlite- 
+
+
+# connection = sqlite3.connect("test.db", check_same_thread=False)
+# cursor = connection.cursor()
+
+# cursor.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT, age INTEGER)")
+
+# @app.get("/")
+# def home_page():
+#     return {"message": "connection done"}
+
+
+# Database connection by sqlalchemy - 
+
+# DATABASE_URL = "sqlite:///./test.db"
+
+# engine = create_engine(
+#     DATABASE_URL,
+#     connect_args={"check_same_thread":False}
+# )
+
+# sessionLocal = sessionmaker(bind=engine)
+
+# Base = declarative_base()
+
+# class Todo(Base):
+#     __tablename__ = "todos"
+
+#     id = Column(Integer, primary_key=True, index=True)
+#     title = Column(String)
+#     completed = Column(String)
+
+# Base.metadata.create_all(bind=engine)
+
+# def get_db():
+#     db = sessionLocal()
+#     try:
+#         yield db
+#     finally:
+#         db.close()
+
+# @app.get("/")
+# def home(db: Session = Depends(get_db)):
+#     return{
+#         "message":"DB connected fine"
+#     }
