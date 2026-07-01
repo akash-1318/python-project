@@ -1,3 +1,4 @@
+from sqlalchemy.connectors import asyncio
 import sqlite3
 from fastapi import FastAPI, status, HTTPException, Request, Depends, Header
 from fastapi.responses import JSONResponse
@@ -6,6 +7,7 @@ import sqlite3
 from sqlalchemy import create_engine,Column,Integer,String
 from sqlalchemy.orm import sessionmaker, declarative_base,Session
 from fastapi import FastAPI,Depends
+import asyncio
 
 app = FastAPI()
 
@@ -275,3 +277,15 @@ app = FastAPI()
 #     return{
 #         "message":"DB connected fine"
 #     }
+
+
+# Async Programming - 
+
+# async def task():
+#     await asyncio.sleep(3)
+#     return "Done"
+
+# @app.get("/")
+# async def home():
+#     result = await asyncio.gather(task(), task(), task())
+#     return {"message": result}
