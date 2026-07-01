@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 app = FastAPI()
 
 @app.get("/news")
-def get_news():
+def get_news(page: int = 1, limit:int = 5 ):
     url = "https://indianexpress.com/"
 
     response = requests.get(url)
@@ -28,7 +28,12 @@ def get_news():
     for item in soup.find_all("a",class_="topblockNews__sidebarLink"):
         title.append(item.text)
 
-    
+    start = (page - 1) * limit
+    end = start + limit
+
     return{
-        "news":title[:2]
+        "news":title[start:end],
+        "page":page,
+        "limit":limit,
+        "total":len(title)
     }
