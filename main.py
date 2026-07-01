@@ -1,31 +1,34 @@
 # import requests
+# from bs4 import BeautifulSoup
 
-# response = requests.get("https://jsonplaceholder.typicode.com/posts/1")
+# url = "http://example.com"
 
+# response = requests.get(url)
 
-# data = response.json()
-# print(data[:2])
+# soup = BeautifulSoup(requests.text,"html.parser")
 
-from fastapi import FastAPI,HTTPException
+# print(soup.title.text)
+
+from fastapi import FastAPI
 import requests
-
+from bs4 import BeautifulSoup
 
 app = FastAPI()
 
-#GET ALL data
-@app.get("/posts")
-def get_posts():
-    url = "https://jsonplaceholder.typicode.com/posts"
-    response = requests.get(url)
-    return response.json()
-
-#Get single post
-@app.get("/posts/{post_id}")
-def get_post(post_id:int):
-    url = f"https://jsonplaceholder.typicode.com/posts/{post_id}"
+@app.get("/news")
+def get_news():
+    url = "https://indianexpress.com/"
 
     response = requests.get(url)
 
-    if response.status_code != 200:
-        raise HTTPException(status_code=404, detail="Page not found")
-    return response.json()
+    soup = BeautifulSoup(response.text, "html.parser")
+
+    title = []
+
+    for item in soup.find_all("a",class_="topblockNews__sidebarLink"):
+        title.append(item.text)
+
+    
+    return{
+        "news":title[:2]
+    }
