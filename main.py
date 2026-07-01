@@ -1,39 +1,46 @@
-# import requests
-# from bs4 import BeautifulSoup
-
-# url = "http://example.com"
-
-# response = requests.get(url)
-
-# soup = BeautifulSoup(requests.text,"html.parser")
-
-# print(soup.title.text)
-
 from fastapi import FastAPI
 import requests
 from bs4 import BeautifulSoup
+import time
 
 app = FastAPI()
 
+#Cache Storage
+cache_data = []
+last_fetch = 0
+
 @app.get("/news")
-def get_news(page: int = 1, limit:int = 5 ):
-    url = "https://indianexpress.com/"
+def get_news():
+    global cache_data, last_fetch
 
-    response = requests.get(url)
+    start = time.time()
 
-    soup = BeautifulSoup(response.text, "html.parser")
+    if time.time() - last_fetch > 60:
+        print("Fetching Fresh Data")
 
-    title = []
+        url= "https://news.ycombinator.com/"
 
-    for item in soup.find_all("a",class_="topblockNews__sidebarLink"):
-        title.append(item.text)
+        response = requests.get(url)
 
-    start = (page - 1) * limit
-    end = start + limit
+        soup = BeautifulSoup(response.text,"html.parser")
+
+        cache_data = [
+            item.text for item in soup.find_all("span", class_="titleline")
+        ]
+
+
+        last_fetch = time.time()
+
+    else:
+        print("Using catche Data")
+
+    end = time.time()
+
+    time_taken = round(end-start,4)
+
+    print("Time Taken: ", time_taken)
 
     return{
-        "news":title[start:end],
-        "page":page,
-        "limit":limit,
-        "total":len(title)
+        "time_taken":time_taken,
+        "data":cache_data[:5]
     }
